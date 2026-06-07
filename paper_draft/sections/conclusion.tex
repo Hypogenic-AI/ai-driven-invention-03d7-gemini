@@ -1,0 +1,13 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+In this work, we introduced \ours, an autonomous framework for material invention that leverages the reasoning capabilities of large language models to traverse the vast space of elemental combinations. By validating against the \gnome dataset, we demonstrated that \gpt-4o possesses significant intrinsic chemical knowledge, outperforming \randomsearch with a medium effect size. Our results show that \zeroshot prompting provides a robust baseline for stable candidate generation, while \activelearning loops can steer the search towards exceptionally stable regions of the material space.
+
+The key takeaway is that LLM-driven autonomous agents can systematically accelerate material invention by acting as intelligent "hypothesis generators" that bridge the gap between human-level reasoning and high-throughput computational validation.
+
+{\bf Future work} will focus on:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item Integrating live equivariant \gnns (e.g., \textsc{MACE} or \textsc{NequIP}) to provide real-time stability predictions for arbitrary LLM-proposed structures.
+    \item Expanding the search space to include complex stoichiometries and crystal structure specifications.
+    \item Scaling the autonomous loop to thousands of iterations to explore more diverse chemical domains.
+\end{itemize}

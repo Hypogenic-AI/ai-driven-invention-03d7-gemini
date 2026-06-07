@@ -1,0 +1,24 @@
+\section{Introduction}
+\label{sec:intro}
+
+The history of human civilization is defined by the materials we have invented, from the Bronze Age to the Silicon Age. Discovering new combinations of elements that yield stable and functional materials is essential for addressing global challenges in energy, electronics, and medicine. However, the combinatorial space of chemical systems is astronomical, making exhaustive exploration impossible. Traditionally, material discovery has relied on human intuition coupled with expensive and time-consuming experimental or density functional theory (\dft) validations.
+
+{\bf Why does this problem matter?} 
+Accelerating the discovery of stable materials is critical for developing next-generation technologies. While recent advances in deep learning, such as the \gnome project \cite{merchant2023scaling}, have successfully identified millions of stable crystal structures, the process still often requires a "generator" that can intelligently propose candidates for validation. There is growing interest in using autonomous agents to close the loop between hypothesis generation and validation, thereby shifting from trial-and-error to systematic discovery.
+
+{\bf What is missing in existing work?}
+Existing high-throughput discovery pipelines often rely on random structure generation or generative models trained on specific structural distributions. While powerful, these methods lack the high-level reasoning and broad chemical intuition required to strategically navigate the chemical space. On the other hand, multi-agent LLM frameworks like \textsc{AtomAgents} \cite{ghafarollahi2025automating} have shown promise in physical simulations, but there remains a gap in establishing a generalized framework that can autonomously propose and refine material systems based on stability feedback from massive datasets.
+
+{\bf Our approach.}
+We propose \ours, a framework for autonomous material invention that leverages the reasoning capabilities of large language models (\llm) to propose stable elemental combinations (see \figref{fig:main_visuals}). By using \gpt as an intelligent hypothesis generator and the \gnome database as an "experimental" ground truth, we simulate an autonomous invention loop. We examine the efficacy of both \zeroshot reasoning and iterative \activelearning to discover stable ternary systems.
+
+{\bf Quantitative preview.}
+Our results indicate that \ours significantly outperforms \randomsearch. In a \zeroshot setting, \ours proposes combinations that are 0.48 eV/atom more stable than random guesses, with a 50\% hit rate in the stable materials dataset. When given performance feedback through \activelearning, the model converges on exceptionally stable systems, reaching an average formation energy of -2.33 eV/atom.
+
+Our main contributions are:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item We propose \ours, an autonomous framework that integrates LLM reasoning with high-throughput material databases for systematic invention.
+    \item We conduct a comparative study of search strategies, demonstrating that \llm-driven discovery significantly outperforms \randomsearch with a medium effect size (Cohen's $d = 0.58$).
+    \item We demonstrate the power of \activelearning in steering autonomous agents toward high-stability regions of the chemical space, identifying critical material systems such as alkaline-earth titanates.
+    \item We provide a detailed taxonomy of failure modes and trade-offs between hit rate and stability in autonomous material search.
+\end{itemize}

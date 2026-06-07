@@ -1,0 +1,13 @@
+\section{Related Work}
+\label{sec:related}
+
+Our work is situated at the intersection of deep learning for materials science, autonomous laboratory agents, and the emerging field of \llm-driven scientific discovery.
+
+\para{Deep Learning for Materials Discovery.}
+The field of computational materials science has been transformed by the advent of large-scale datasets and deep learning models. The \gnome project \cite{merchant2023scaling} represents a landmark achievement, using graph neural networks (\gnn) to discover 2.2 million new crystal structures, of which 381,000 were found to be stable. Other foundational efforts include the Materials Project and OQMD, which provide the benchmarks for stability and property prediction. While these works focus on scaling the *prediction* of stability, our work focuses on the *intelligent generation* of candidates to be predicted.
+
+\para{Autonomous Agents and Multi-Agent Systems.}
+Recent work has explored the use of autonomous agents to automate complex scientific workflows. \textsc{AtomAgents} \cite{ghafarollahi2025automating} introduced a physics-aware multimodal multi-agent framework that uses \llm agents (Physicist, Chemist, Engineer) to design high-entropy alloys (\hea) and predict their mechanical properties using \textsc{LAMMPS}. Building on this, Li et al. \cite{li2025active} proposed an \activelearning framework for conditional inverse design using foundation atomic models. Our work complements these approaches by providing a generalized "inventor" framework that uses \llm reasoning to navigate high-dimensional elemental spaces.
+
+\para{\llm-Driven Scientific Discovery.}
+Beyond materials science, \llms are increasingly used for hypothesis generation across various domains. The reasoning capabilities of models like \gpt have been tested in chemistry, biology, and physics. Unlike standard generative models, \llms can leverage vast pre-trained knowledge to make "informed guesses" about chemical compatibility and stability. We build upon this by quantifying the advantage of \llm reasoning over \randomsearch and demonstrating how iterative feedback further enhances this capability.

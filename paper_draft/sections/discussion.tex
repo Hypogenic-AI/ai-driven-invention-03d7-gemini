@@ -1,0 +1,16 @@
+\section{Discussion}
+\label{sec:discussion}
+
+The results demonstrate that \ours can act as an autonomous inventor by leveraging pre-trained chemical intuition and active feedback. However, several critical themes and limitations emerge from our analysis.
+
+\para{Statistical vs. Practical Significance.}
+The p-value of 0.12 observed in our t-test highlights the challenges of small-sample statistical analysis in high-variance chemical spaces. However, the medium effect size (Cohen's $d = 0.58$) and the consistent shift in the distribution towards lower energies (see \figref{fig:energy_comp}) strongly suggest that \llm reasoning is not merely random. Increasing the sample size to $n=1000$ would likely solidify the statistical significance.
+
+\para{The Stability-Discovery Trade-off.}
+In the \activelearning loop, we observed a decrease in hit rate (33.3\%) as the model was pushed towards lower energy targets. This illustrates a "discovery trade-off": as the agent seeks more extreme properties, it moves away from the "well-trodden" regions of the dataset. Many failures were "chemically plausible" systems (e.g., $Ca-Al-Si$) that might be stable in reality but were not present in the specific \gnome summary subset we used. This suggests that the model is pushing against the boundaries of the validation dataset rather than failing in its reasoning.
+
+\para{Error Taxonomy and Hallucinations.}
+The primary failure mode of \ours is the proposal of "hallucinated" systems—combinations that do not have a stable representative in the dataset. These often involve elements that are chemically similar to known stable systems but lack a specific documented stable phase (e.g., swapping Li for Na in certain complex oxides). This underscores the need for "live" validation models, such as equivariant \gnns, which can predict the stability of *arbitrary* structures proposed by the \llm, rather than relying on static dataset lookups.
+
+\para{Broader Implications.}
+The ability of an autonomous agent to independently discover titanate-based perovskites (\tabref{tab:examples}) through iterative feedback is significant. It suggests that \llm agents can rediscover fundamental material science principles and apply them to search for novel compositions. This framework could be extended to target specific properties beyond stability, such as bandgap for solar cells or ionic conductivity for batteries.

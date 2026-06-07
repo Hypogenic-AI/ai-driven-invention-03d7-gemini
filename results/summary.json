@@ -1,0 +1,14 @@
+{
+  "Random": {
+    "Hit_Rate": 0.4,
+    "Avg_Energy": -0.8200583333333333
+  },
+  "Zero_Shot": {
+    "Hit_Rate": 0.5,
+    "Avg_Energy": -1.3038866666666666
+  },
+  "Active_Learning": {
+    "Hit_Rate": 0.3333333333333333,
+    "Avg_Energy": -2.3386400000000003
+  }
+}

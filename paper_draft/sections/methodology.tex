@@ -1,0 +1,27 @@
+\section{Methodology}
+\label{sec:method}
+
+We designed \ours as an autonomous loop where an \llm acts as an inventor tasked with proposing stable ternary material systems. The system validates these hypotheses against a large-scale database of known stable materials.
+
+\subsection{Dataset Preparation}
+We use the stable materials summary dataset from the \gnome project \cite{merchant2023scaling} as our ground truth for validation. The dataset contains over 60,000 stable ternary materials comprising 83 unique elements. For each material, we extract the \efeas (eV/atom) as the primary stability metric. We index the dataset by elemental system (e.g., Li-Fe-P) to allow for fast lookup of the most stable representative for any proposed combination.
+
+\subsection{Experimental Setup}
+We compare three distinct search strategies to evaluate the "invention" capability of our system:
+
+\para{\randomsearch Baseline.}
+To represent a naive trial-and-error approach, we randomly generate 30 unique ternary systems from the 83 elements present in the dataset. This baseline establishes the probability of finding a stable combination by chance and provides a benchmark for the average stability of random elemental clusters.
+
+\para{\llm \zeroshot Search.}
+We prompt \gpt to propose 30 highly stable ternary systems without providing any prior examples or feedback. This test evaluates the model's intrinsic chemical knowledge and its ability to reason about elemental compatibility and thermodynamic stability based on its pre-training.
+
+\para{\llm \activelearning Search.}
+We implement an iterative feedback loop where the model proposes one system at a time. If the system is found in the \gnome dataset, the exact \efeas is provided as feedback, and the model is instructed to find a combination that is even more stable. If the system is not found, the model is informed of the failure and asked to try a different combination. This process is repeated for 15 iterations.
+
+\subsection{Evaluation Metrics}
+We evaluate the search strategies using the following metrics:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item {\bf Hit Rate:} The proportion of proposed elemental combinations that exist in the \gnome stable materials dataset.
+    \item {\bf Mean Formation Energy (\efeas):} The average \efeas of the "hits" (found combinations). Lower (more negative) values indicate higher stability.
+    \item {\bf Statistical Significance:} We use a two-sample t-test (unequal variance) to compare the \efeas distributions of \randomsearch and \llm-guided search, calculating Cohen's $d$ to measure effect size.
+\end{itemize}

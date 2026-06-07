@@ -1,0 +1,467 @@
+You are an academic paper writer. Generate a complete NEURIPS style paper
+based on the experiment results provided.
+
+════════════════════════════════════════════════════════════════════════════════
+                         IMPORTANT: BEFORE YOU START
+════════════════════════════════════════════════════════════════════════════════
+
+Before writing any content, you MUST complete these steps:
+
+1. READ THE SKILL: Review the paper-writer skill at .gemini/skills/paper-writer/SKILL.md
+2. READ THE STYLE GUIDE: Study templates/paper_writing/lab_style_guide.md carefully
+3. REVIEW EXAMPLES: Browse paper_examples/ for formatting and language patterns:
+   - Look at sections/1.introduction.tex for language style
+   - Look at tables/*.tex for table formatting
+   - Look at commands/*.tex for macro usage
+4. VERIFY COMMAND TEMPLATES: Command templates (math.tex, general.tex, macros.tex) are pre-copied to paper_draft/commands/
+
+CRITICAL: Reference example papers for FORMATTING and LANGUAGE STYLE only.
+Do NOT copy content, phrasing, or narrative structure from the example papers.
+The examples are in a different research domain - focus only on presentation style.
+
+════════════════════════════════════════════════════════════════════════════════
+                            EXPERIMENT REPORT
+════════════════════════════════════════════════════════════════════════════════
+
+# Beyond Trial and Error: AI-Driven Invention (Atomic Modelling)
+
+## 1. Executive Summary
+This research investigates whether an intelligent system can autonomously discover novel combinations of elements that yield highly stable materials, accelerating the invention process beyond traditional trial and error. We developed an autonomous Large Language Model (LLM) agent to propose stable ternary chemical systems, validating its hypotheses against the DeepMind GNoME dataset. The results indicate that an LLM with zero-shot prompting can propose elemental combinations with notably lower formation energies (average -1.30 eV/atom) and a higher hit rate (50%) compared to random sampling (-0.82 eV/atom, 40% hit rate), demonstrating a medium effect size (Cohen's d = 0.58). Furthermore, when engaging in an active learning loop with performance feedback, the LLM discovered even more stable materials (-2.33 eV/atom on average), despite a lower hit rate as it explored more exotic combinations. These findings highlight the potential of combining LLM reasoning with high-throughput computational datasets to systematize material invention.
+
+## 2. Research Question & Motivation
+**Hypothesis Tested:** An intelligent system that autonomously conducts structured experiments across known elements can systematically discover combinations with lower formation energies than random exploration, acting as an autonomous inventor.
+
+**Motivation:** Human progress has heavily relied on discovering new combinations of existing elements (e.g., alloys, ceramics). This process is traditionally limited by human intuition and the high cost of laboratory or DFT (Density Functional Theory) experiments. Systems like GNoME have mapped vast spaces of stable structures using GNNs. By using an LLM to smartly traverse this space—generating hypotheses and iteratively learning from the structural databases—we can close the loop, building a fully autonomous pipeline for targeted invention.
+
+## 3. Methodology
+### Approach
+We designed an automated loop where an LLM (GPT-4o) acts as an inventor tasked with proposing stable ternary material systems (e.g., combinations of 3 distinct elements like Li-Fe-P). We validated its proposals against the `stable_materials_summary.csv` dataset from the GNoME project, evaluating stability based on `Formation Energy Per Atom`.
+
+### Experimental Steps
+1.  **Dataset Preparation:** We loaded the GNoME dataset and extracted all ternary systems and their lowest formation energies. The set contained 63,441 ternary materials comprising 83 unique elements.
+2.  **Random Baseline Search:** We randomly generated 30 unique ternary systems from the 83 elements. We checked their presence in the dataset and computed their average formation energy.
+3.  **LLM Zero-Shot Search:** We prompted the `gpt-4o` model (via OpenRouter) to propose 30 highly stable ternary systems without prior examples, testing its intrinsic chemical knowledge.
+4.  **LLM Active Learning Search:** Over 15 steps, the LLM proposed a single system. If it existed in the dataset, the exact formation energy was provided as feedback with instructions to find something even more stable. If not found, it was instructed to try another combination.
+5.  **Metrics:** Hit Rate (proportion of valid proposals present in the GNoME stable dataset) and Average Formation Energy (lower/negative values are more stable).
+
+### Computational Resources
+-   **Model:** `openai/gpt-4o`
+-   **Environment:** Python 3.12, `pandas`, `scipy.stats`, `openai` SDK.
+
+## 4. Results
+The experiment yielded the following outcomes across the three search strategies:
+
+| Search Method | Hit Rate (Found in Dataset) | Mean Formation Energy (eV/atom) | Standard Deviation |
+| :--- | :--- | :--- | :--- |
+| Random Search (n=30) | 40.0% (12/30) | -0.8201 | 0.5435 |
+| LLM Zero-Shot (n=30) | 50.0% (15/30) | -1.3039 | 0.9526 |
+| LLM Active Learning (n=15) | 33.3% (5/15) | -2.3386 | N/A |
+
+### Key Findings
+1.  **Zero-Shot Efficacy:** The LLM's intrinsic knowledge led to a higher hit rate and combinations that were, on average, 0.48 eV/atom more stable than random guessing.
+2.  **Active Learning Depth:** The Active Learning agent found fewer exact matches (33.3%) because it began pushing boundaries (e.g., proposing exotic transition metal oxides). However, the ones it did find (e.g., Na-Ti-O, Sr-Ti-O, Ba-Ti-O) were exceptionally stable, driving the mean down to -2.33 eV/atom.
+
+## 5. Analysis & Discussion
+### Statistical Significance
+We conducted a two-sample t-test (unequal variance) comparing the formation energies of the Random Search vs. the LLM Zero-Shot search:
+-   **T-statistic:** -1.598
+-   **P-value:** 0.123
+-   **Cohen's d:** -0.584
+
+*Interpretation:* While the p-value (0.12) is above the traditional strict threshold of 0.05 (likely due to the small sample size of n=30 proposals and high variance), Cohen's d indicates a **medium effect size**. The LLM is practically pushing the distribution of proposals towards more stable domains compared to naive random choice.
+
+### Error Taxonomy
+-   **Hallucinated Systems (Not Found):** The primary failure mode was the LLM proposing combinations (like Ca-Al-Si or Li-Al-O) that, while chemically plausible, did not have a stable representative explicitly listed in the GNoME summary dataset subset we used.
+-   **Active Learning Trade-off:** In the Active Learning loop, when told to find lower energy combinations, the LLM shifted strongly to Alkaline-Earth Titanates (Sr-Ti-O, Ba-Ti-O), which successfully minimized the energy drastically.
+
+## 6. Limitations
+1.  **Dataset Matching:** We only checked if the 3-element system *existed* in the GNoME dataset. We did not use a live GNN (like MACE or NequIP) to predict the energy of arbitrary non-dataset structures, meaning perfectly good structures proposed by the LLM might be marked as "Not Found" simply because they weren't in this specific dataset.
+2.  **Sample Size:** Testing only 30 proposals limits the statistical power of the t-test. A larger scale run (n=1000) would likely tighten confidence intervals and yield a significant p-value.
+3.  **Complex Stoichiometry:** We reduced the problem to elemental systems rather than exact stoichiometries (like LiFePO4) to simplify the prompt and dataset lookup.
+
+## 7. Conclusions & Next Steps
+**Conclusion:** An autonomous LLM-driven system can systematically discover more stable elemental combinations than random search by leveraging pre-trained chemical intuition and active feedback loops. While zero-shot prompting provides a solid baseline improvement, active learning loops steer the model toward exceptionally stable regions of the material space.
+
+**Next Steps:**
+-   Integrate a fast equivariant GNN (like NequIP) directly into the loop to evaluate *any* LLM-proposed structure, eliminating the reliance on a static dataset lookup.
+-   Expand the agent's capabilities to specify full stoichiometries and crystal structures.
+-   Scale the experiment to 10,000+ proposals to establish robust statistical significance.
+
+════════════════════════════════════════════════════════════════════════════════
+                            RESEARCH PLAN
+════════════════════════════════════════════════════════════════════════════════
+
+## Research Title
+Beyond Trial and Error: AI-Driven Invention (Atomic Modelling)
+
+## Motivation & Novelty Assessment
+
+### Why This Research Matters
+Human progress relies on inventing new combinations of existing elements, from medicines to advanced materials. Typically, this process relies on human intuition and trial-and-error, which is slow and limited by human cognitive bandwidth. An autonomous, intelligent system capable of systematically structuring experiments across the space of possible material combinations could vastly accelerate breakthrough discoveries in domains like materials science and engineering.
+
+### Gap in Existing Work
+Existing work (like DeepMind's GNoME) utilizes Graph Neural Networks for large-scale stability prediction of generated crystal structures, and work like AtomAgents uses multi-agent frameworks for complex physics simulations. However, what is lacking is an overarching "inventor" framework that uses the reasoning capabilities of LLMs to intelligently traverse the design space, formulate hypotheses about combinations, and validate them against known stable domains automatically, closing the loop of autonomous invention.
+
+### Our Novel Contribution
+We propose a generalized "AI-Driven Inventor" system that integrates real-time LLM reasoning to propose novel elemental combinations (alloys/materials) optimized for specific properties, leveraging the GNoME stable materials database as a validation ground for stability (Formation Energy / Energy Above Hull).
+
+### Experiment Justification
+- **Experiment 1 (LLM Combination Proposal vs. Random Search):** We will test whether an LLM (using domain knowledge) can propose elemental combinations that are statistically more stable (lower formation energy in the GNoME dataset) than random sampling.
+- **Experiment 2 (Iterative Refinement - Active Learning):** We will test if the LLM can iteratively refine its proposals when given feedback on the stability of its previous guesses, mimicking the scientific method.
+
+---
+
+## Research Question
+Can an LLM-based autonomous agent systematically propose and refine elemental combinations that are more likely to result in stable materials compared to random exploration, using the GNoME stability dataset as the ground truth?
+
+## Background and Motivation
+The search space for stable materials is vast. Traditional computational methods (like DFT) are expensive. While models like GNoME have mapped out hundreds of thousands of stable structures, navigating this space strategically requires intelligent hypothesis generation. By using LLMs as the "hypothesis generator" and GNoME data as "experimental validation", we simulate a fully autonomous invention loop.
+
+## Hypothesis Decomposition
+1. **Hypothesis 1:** LLMs possess intrinsic chemical knowledge that allows them to propose elemental combinations with significantly lower formation energies than random element combinations.
+2. **Hypothesis 2:** Providing LLMs with performance feedback (active learning loop) will result in proposed combinations converging towards the convex hull of stability (lower Energy Above Hull).
+
+## Proposed Methodology
+
+### Approach
+We will build a simple autonomous loop where an LLM agent is tasked with inventing stable ternary or quaternary materials. The system will parse the agent's proposed chemical formula, check if it exists in the GNoME `stable_materials_summary.csv` dataset, and retrieve its stability metrics.
+
+### Experimental Steps
+1. **Data Ingestion:** Load and preprocess the `stable_materials_summary.csv` dataset. Create an index of formulas to their `formation_energy_per_atom` and `energy_above_hull`.
+2. **Random Baseline Search:** Generate $N$ random combinations of 3-4 elements that exist in the dataset and compute their average stability metrics.
+3. **LLM Zero-Shot Search:** Prompt an LLM to propose $N$ novel stable 3-4 element combinations. Check their stability in the dataset.
+4. **LLM Iterative Search (Active Learning):** Prompt the LLM to propose 1 combination. Provide its stability as feedback. Ask the LLM to adjust and propose the next. Repeat for $M$ steps.
+5. **Evaluation:** Compare the success rate (finding stable materials) and average formation energy across methods.
+
+### Baselines
+- **Random Search:** Randomly picking 3-4 elements from the periodic table and checking the GNoME database. This represents the "dumb trial and error" approach.
+
+### Evaluation Metrics
+- **Hit Rate:** Percentage of proposed combinations that exist in the GNoME stable dataset.
+- **Average Formation Energy:** Mean formation energy of the proposed combinations (lower is better).
+- **Energy Above Hull:** Mean energy above hull for proposed structures (where 0 indicates a stable structure).
+
+### Statistical Analysis Plan
+- We will conduct a t-test to compare the mean formation energies of LLM proposals vs. random search.
+- We will plot learning curves for the iterative search to see if stability improves over iterations.
+
+## Expected Outcomes
+We expect the LLM to significantly outperform random search due to its pre-trained knowledge of chemistry and material science. We also expect the active learning loop to show a downward trend in Energy Above Hull over iterations.
+
+## Timeline and Milestones
+1. Environment and dataset setup (20 mins).
+2. Implementing the search baselines and LLM interface (45 mins).
+3. Running experiments and parsing results (45 mins).
+4. Analysis and documentation (30 mins).
+
+## Potential Challenges
+- The LLM might propose formulas that don't match the exact stoichiometry in the GNoME dataset.
+  - *Mitigation:* We will simplify the check to matching the *elemental system* (e.g., if LLM proposes Li2O, we check for the Li-O system in GNoME and pick the most stable variant).
+- Cost/Rate limits on LLM calls.
+  - *Mitigation:* Use OpenRouter with provided environment variables and limit $N$ to 30-50 for proof-of-concept.
+
+## Success Criteria
+- Successful execution of the automated loop.
+- Statistically significant difference between LLM-guided search and random search.
+- A comprehensive REPORT.md documenting the findings.
+
+════════════════════════════════════════════════════════════════════════════════
+                          LITERATURE REVIEW
+════════════════════════════════════════════════════════════════════════════════
+
+# Literature Review: AI-Driven Invention (Atomic Modelling)
+
+## Research Area Overview
+The field of materials science is undergoing a paradigm shift from traditional trial-and-error experimentation to AI-driven autonomous discovery. This transition is enabled by large-scale datasets, powerful Graph Neural Networks (GNNs) for atomic modelling, and multi-agent LLM systems that can plan and execute complex experimental workflows.
+
+## Key Papers
+
+### Paper 1: Scaling deep learning for materials discovery (GNoME)
+- **Authors**: Amil Merchant, Simon Batzner, et al.
+- **Year**: 2023
+- **Source**: Nature / arXiv:2310.14029
+- **Key Contribution**: Introduced Graph Networks for Materials Exploration (GNoME), discovering 2.2 million new crystal structures.
+- **Methodology**: Large-scale training of GNNs on Materials Project data, followed by active learning loops where candidate structures are validated via Density Functional Theory (DFT).
+- **Datasets Used**: Materials Project (2018 snapshot), OQMD, WBM.
+- **Results**: Increased the number of known stable materials by an order of magnitude, identifying 381,000 stable crystals.
+- **Relevance**: Provides the foundation for large-scale structural discovery and stable crystal identification.
+
+### Paper 2: Automating alloy design and discovery with physics-aware multimodal multiagent AI (AtomAgents)
+- **Authors**: Alireza Ghafarollahi, Markus J. Buehler
+- **Year**: 2025
+- **Source**: PNAS / arXiv:2410.13768
+- **Key Contribution**: Developed "AtomAgents," a multi-agent LLM-based framework for autonomous alloy design.
+- **Methodology**: Integration of LLMs with atomistic simulation tools (LAMMPS). Specialized agents (Physicist, Chemist, Engineer) collaborate to design HEAs (High Entropy Alloys) and analyze their properties.
+- **Datasets Used**: Uses interatomic potential repositories (EAM, MEAM, MTP).
+- **Results**: Successfully designed novel HEAs and predicted their mechanical properties, demonstrating the power of multi-agent collaboration in scientific discovery.
+- **Relevance**: Shows how to bridge high-level reasoning (LLMs) with low-level physical simulations.
+
+### Paper 3: Active Learning for Conditional Inverse Design with Crystal Generation and Foundation Atomic Models
+- **Authors**: Zhuoyuan Li, et al.
+- **Year**: 2025
+- **Source**: arXiv:2502.16984
+- **Key Contribution**: Combined generative models with Foundation Atomic Models (FAMs) for inverse design of crystals.
+- **Methodology**: Active learning framework using crystal generation models (like CDVAE) and FAMs (like MACE) to iteratively improve discovery of materials with target properties.
+- **Relevance**: Highlights the current state-of-the-art in "targeted" discovery rather than broad structural search.
+
+## Common Methodologies
+- **Graph Neural Networks (GNNs)**: Used for representing crystal structures and predicting properties (energies, stability).
+- **Active Learning**: Iterative loops of structure generation -> property prediction -> high-fidelity validation (DFT/LAMMPS) -> retraining.
+- **Multi-Agent Systems**: Using LLMs to orchestrate complex simulation pipelines and expert-level reasoning.
+- **Inverse Design**: Starting with target properties and generating structures that might satisfy them.
+
+## Standard Baselines
+- **Materials Project (MP)**: The gold standard for crystal structures and properties.
+- **OQMD (Open Quantum Materials Database)**: Another large database for inorganic materials.
+- **NequIP / MACE**: State-of-the-art equivariant GNNs for interatomic potentials.
+
+## Evaluation Metrics
+- **Energy Above Hull (Ehull)**: Distance to the convex hull of stability (lower is more stable).
+- **Formation Energy**: Energy required to form the material from elements.
+- **Accuracy of Property Prediction**: MAE/RMSE of predicted energies compared to DFT.
+
+## Recommendations for Our Experiment
+1. **Focus on Multi-Agent Orchestration**: Build upon the AtomAgents concept to automate the exploration of the GNoME dataset.
+2. **Target Specific Properties**: Instead of broad search, use active learning to find materials with specific mechanical or electronic properties (e.g., high-toughness alloys or Li-ion conductors).
+3. **Hybrid Validation**: Use fast GNNs (GNoME-like) for initial screening and LAMMPS (AtomAgents-like) for deeper property verification.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          PAPER REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+Generate a complete academic paper with the following structure:
+
+1. TITLE
+   - Clear, specific, informative
+   - Should convey main finding or contribution
+
+2. AUTHOR
+   - Use this exact author line in the \author{} block: shivanshu sirohi and NeuriCo
+
+3. ABSTRACT (150-250 words)
+   - Problem statement
+   - Approach
+   - Key results
+   - Significance
+
+4. INTRODUCTION
+   - Research problem and motivation
+   - Gap in existing work
+   - Our contribution (be specific)
+   - Paper organization
+
+5. RELATED WORK
+   - Organized by theme/approach
+   - Position our work relative to prior work
+   - Cite papers from literature review
+
+6. METHODOLOGY
+   - Clear description of approach
+   - Experimental setup
+   - Datasets used
+   - Evaluation metrics
+   - Baselines
+
+7. RESULTS
+   - Present results with tables and figures
+   - Statistical analysis
+   - Comparison to baselines
+   - Ablation studies (if applicable)
+
+8. DISCUSSION
+   - Interpretation of results
+   - Limitations
+   - Broader implications
+
+9. CONCLUSION
+   - Summary of contributions
+   - Key findings
+   - Future work
+
+10. REFERENCES
+   - BibTeX format
+   - All cited papers
+
+════════════════════════════════════════════════════════════════════════════════
+                          OUTPUT FORMAT
+════════════════════════════════════════════════════════════════════════════════
+
+Create a MODULAR LaTeX project with the following directory structure:
+
+paper_draft/
+├── main.tex              # Main file that imports all sections
+├── references.bib        # BibTeX references
+├── sections/
+│   ├── abstract.tex      # Abstract content
+│   ├── introduction.tex  # Introduction section
+│   ├── related_work.tex  # Related work section
+│   ├── methodology.tex   # Methodology section
+│   ├── results.tex       # Results section
+│   ├── discussion.tex    # Discussion section
+│   └── conclusion.tex    # Conclusion section
+├── figures/              # Directory for any generated figures
+├── tables/               # Directory for complex standalone tables
+└── appendix/             # Directory for appendix sections (if needed)
+
+INSTRUCTIONS:
+1. First, create the directory structure above (mkdir -p paper_draft/sections paper_draft/figures paper_draft/tables paper_draft/appendix)
+2. Write main.tex using the EXACT preamble for NEURIPS:
+
+   \documentclass{article}
+   \usepackage[final]{neurips_2025}  % NEURIPS style (neurips_2025.sty is in paper_draft/)
+   \usepackage[hidelinks]{hyperref}  % REQUIRED: clickable links
+   \usepackage{booktabs}  % REQUIRED: professional tables
+   \usepackage{graphicx}
+   \usepackage{amsmath,amssymb}
+
+   % Import command files
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+   % Use this bibliography style:
+   \bibliographystyle{plainnat}
+
+   \author{shivanshu sirohi and NeuriCo}
+
+   - Use \input{sections/...} to include each section
+   - Use \bibliography{references} for references
+3. Write each section file with COMPLETE content (no placeholders)
+4. Each section file should include its \section{} command
+5. Write references.bib with all citations in BibTeX format
+6. After writing all files, compile the paper:
+   cd paper_draft && pdflatex -interaction=nonstopmode main.tex && bibtex main && pdflatex -interaction=nonstopmode main.tex && pdflatex -interaction=nonstopmode main.tex
+
+This modular structure allows humans to easily:
+- Edit individual sections without navigating a large file
+- Track changes per section
+- Reuse sections across different paper versions
+
+════════════════════════════════════════════════════════════════════════════════
+                          QUALITY REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+- Academic tone throughout
+- All claims must be supported by data from the experiment report
+- Proper citations using \cite{} commands
+- Clear figures and tables with proper captions
+- NO placeholder text - every section must have real content
+- The paper MUST compile without errors
+- If compilation fails, debug and fix the LaTeX errors
+
+════════════════════════════════════════════════════════════════════════════════
+                          LAB WRITING STYLE
+════════════════════════════════════════════════════════════════════════════════
+
+Follow these lab-specific conventions to match our paper style:
+
+1. LANGUAGE STYLE:
+   - Use active voice: "We propose", "We examine", "We focus on"
+   - Be direct and confident: "Our main question is...", "We hypothesize that..."
+   - State things clearly and simply - prefer plain language over jargon
+   - Use bold questions as paragraph organizers: {\bf what is X?}
+   - Include specific quantitative claims: "8.97% over baseline"
+   - Avoid fancy wording: "utilize" → "use", "facilitate" → "help"
+
+2. INTRODUCTION STRUCTURE:
+   - Engaging hook (get to the point quickly)
+   - Problem importance
+   - Gap identification
+   - Your approach with method figure reference
+   - Quantitative preview of results
+   - Contribution bullets (3-4 items, action verbs)
+
+3. CONTRIBUTION LISTS:
+   \begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+       \item We propose...
+       \item We conduct...
+       \item We complement...
+   \end{itemize}
+
+4. MODULAR COMMANDS STRUCTURE:
+   Command templates are pre-copied to paper_draft/commands/:
+   - math.tex: Math notation macros
+   - general.tex: Formatting macros
+   - macros.tex: Project-specific term definitions (customize this for your paper)
+
+   In main.tex, include:
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+5. REFERENCE CONVENTIONS:
+   Use reference macros from math.tex:
+   - \figref{fig:name} for "figure 1" (lowercase, in-sentence)
+   - \Figref{fig:name} for "Figure 1" (capitalized, start of sentence)
+   - \secref{sec:name} for "section 2"
+
+6. TEXT FORMATTING:
+   - Use \para{Header text} for bold paragraph headers
+   - Define method/dataset names with \textsc and \xspace:
+     \newcommand{\methodname}{\textsc{MethodName}\xspace}
+
+7. TABLE FORMATTING:
+   - Use booktabs package (no vertical lines)
+   - Use \resizebox{\textwidth}{!}{...} for wide tables
+   - Use @{} to remove padding at table edges
+   - Use \cmidrule(lr){x-y} for sub-headers
+   - Use \textsc{} for dataset/method names in headers
+   - Bold best results with {\bf ...}
+
+8. FIGURE FORMATTING:
+   - Use 0.32\textwidth for 3-column subfigures
+   - Use 0.95\linewidth for full-width figures
+   - Use \input{figures/legend} for shared legends
+   - Write self-contained captions explaining key observations
+
+9. RESULTS PRESENTATION:
+   - Define \increase and \decrease for colored arrows (green up, red down)
+   - Bold best results in tables
+   - Report confidence intervals when available
+
+10. ALGORITHM STYLING:
+    - Use algpseudocode with [noend]
+    - Use \triangleright for comments
+
+11. HYPERLINKS (REQUIRED):
+    - Always use \usepackage[hidelinks]{hyperref} or with colored links
+    - All citations, section refs, figure refs, table refs must be clickable
+    - This is essential for reader navigation
+
+════════════════════════════════════════════════════════════════════════════════
+                          WORKFLOW: REVIEW AND REFLECT
+════════════════════════════════════════════════════════════════════════════════
+
+Before calling finish, you MUST complete these review steps:
+
+1. REVIEW RESOURCES (at the start):
+   - Read .gemini/skills/paper-writer/SKILL.md for detailed guidance
+   - Study templates/paper_writing/lab_style_guide.md for style conventions
+   - Browse paper_examples/ for formatting and language patterns
+
+2. SELF-REFLECTION (before finishing):
+   After writing all sections, review your work against these criteria:
+
+   LANGUAGE CHECK:
+   - [ ] Is the writing clear and jargon-free?
+   - [ ] Are claims specific with quantitative support?
+   - [ ] Is active voice used throughout?
+
+   FORMATTING CHECK:
+   - [ ] Does main.tex include \input{commands/math}, \input{commands/general}, \input{commands/macros}?
+   - [ ] Is hyperref package included for clickable references?
+   - [ ] Do tables use booktabs (no vertical lines)?
+   - [ ] Are best results bolded in tables?
+   - [ ] Are figures/tables properly captioned?
+
+   STRUCTURE CHECK:
+   - [ ] Does introduction follow: hook → importance → gap → approach → preview → contributions?
+   - [ ] Are contribution bullets specific with action verbs?
+   - [ ] Does the paper compile without errors?
+
+3. FIX ISSUES:
+   - Address any issues found in the self-reflection
+   - Re-compile and verify the PDF looks correct
+
+Only after completing this review should you consider the paper finished.

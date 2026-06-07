@@ -1,0 +1,698 @@
+{
+  "random": [
+    {
+      "elements": [
+        "Ge",
+        "V",
+        "Tl"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Sb",
+        "N",
+        "Al"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Nd",
+        "Np",
+        "Ag"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Rb",
+        "Pu",
+        "Lu"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Pu",
+        "Cl",
+        "Tl"
+      ],
+      "formation_energy": -1.9057,
+      "found": true
+    },
+    {
+      "elements": [
+        "Ti",
+        "Cs",
+        "Br"
+      ],
+      "formation_energy": -1.9228,
+      "found": true
+    },
+    {
+      "elements": [
+        "Cd",
+        "Tl",
+        "Th"
+      ],
+      "formation_energy": -0.1359,
+      "found": true
+    },
+    {
+      "elements": [
+        "Pt",
+        "Ag",
+        "Sr"
+      ],
+      "formation_energy": -0.6947,
+      "found": true
+    },
+    {
+      "elements": [
+        "Sb",
+        "Ho",
+        "Lu"
+      ],
+      "formation_energy": -0.9315,
+      "found": true
+    },
+    {
+      "elements": [
+        "Pr",
+        "F",
+        "N"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Rb",
+        "S",
+        "N"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Br",
+        "S",
+        "Mg"
+      ],
+      "formation_energy": -0.7463,
+      "found": true
+    },
+    {
+      "elements": [
+        "Nd",
+        "Pu",
+        "Ba"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Sn",
+        "Cr",
+        "Tb"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "U",
+        "Pb",
+        "Th"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Pd",
+        "B",
+        "Pm"
+      ],
+      "formation_energy": -0.3518,
+      "found": true
+    },
+    {
+      "elements": [
+        "Ba",
+        "Ta",
+        "Zn"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "C",
+        "Mo",
+        "Dy"
+      ],
+      "formation_energy": -0.3541,
+      "found": true
+    },
+    {
+      "elements": [
+        "Sm",
+        "H",
+        "Tc"
+      ],
+      "formation_energy": -0.4768,
+      "found": true
+    },
+    {
+      "elements": [
+        "Gd",
+        "U",
+        "Ti"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Ti",
+        "Ta",
+        "Dy"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Ba",
+        "N",
+        "Cr"
+      ],
+      "formation_energy": -1.0046,
+      "found": true
+    },
+    {
+      "elements": [
+        "V",
+        "Pm",
+        "H"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Pr",
+        "Si",
+        "Tb"
+      ],
+      "formation_energy": -0.7191,
+      "found": true
+    },
+    {
+      "elements": [
+        "Cu",
+        "Y",
+        "Mn"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "I",
+        "V",
+        "Th"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Pa",
+        "Al",
+        "B"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Pr",
+        "As",
+        "Ba"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Cd",
+        "V",
+        "Mn"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Sb",
+        "Nb",
+        "Hf"
+      ],
+      "formation_energy": -0.5974,
+      "found": true
+    }
+  ],
+  "zero_shot": [
+    {
+      "elements": [
+        "Li",
+        "Fe",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Na",
+        "Co",
+        "P"
+      ],
+      "formation_energy": -0.5645,
+      "found": true
+    },
+    {
+      "elements": [
+        "K",
+        "Ni",
+        "S"
+      ],
+      "formation_energy": -0.6551,
+      "found": true
+    },
+    {
+      "elements": [
+        "Rb",
+        "Cu",
+        "Cl"
+      ],
+      "formation_energy": -1.514,
+      "found": true
+    },
+    {
+      "elements": [
+        "Cs",
+        "Mn",
+        "Se"
+      ],
+      "formation_energy": -1.1696,
+      "found": true
+    },
+    {
+      "elements": [
+        "Mg",
+        "Zn",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Ca",
+        "Ti",
+        "N"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Sr",
+        "V",
+        "Sb"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Ba",
+        "Cr",
+        "Te"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Sc",
+        "Zr",
+        "Br"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Y",
+        "Nb",
+        "I"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "La",
+        "Mo",
+        "F"
+      ],
+      "formation_energy": -3.2127,
+      "found": true
+    },
+    {
+      "elements": [
+        "Al",
+        "Cd",
+        "S"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Si",
+        "Ge",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Ga",
+        "In",
+        "Se"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "B",
+        "Fe",
+        "P"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Cu",
+        "Sn",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Zn",
+        "Sb",
+        "Cl"
+      ],
+      "formation_energy": -0.8274,
+      "found": true
+    },
+    {
+      "elements": [
+        "Pb",
+        "Bi",
+        "S"
+      ],
+      "formation_energy": -0.7385,
+      "found": true
+    },
+    {
+      "elements": [
+        "Ag",
+        "Au",
+        "Te"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Ti",
+        "V",
+        "N"
+      ],
+      "formation_energy": -1.4371,
+      "found": true
+    },
+    {
+      "elements": [
+        "Zr",
+        "Hf",
+        "O"
+      ],
+      "formation_energy": -3.8316,
+      "found": true
+    },
+    {
+      "elements": [
+        "Nb",
+        "Ta",
+        "S"
+      ],
+      "formation_energy": -1.4186,
+      "found": true
+    },
+    {
+      "elements": [
+        "Fe",
+        "Co",
+        "As"
+      ],
+      "formation_energy": -0.2913,
+      "found": true
+    },
+    {
+      "elements": [
+        "Ni",
+        "Pd",
+        "Cl"
+      ],
+      "formation_energy": -0.9325,
+      "found": true
+    },
+    {
+      "elements": [
+        "Pt",
+        "Ir",
+        "I"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "elements": [
+        "Ru",
+        "Rh",
+        "Se"
+      ],
+      "formation_energy": -0.7139,
+      "found": true
+    },
+    {
+      "elements": [
+        "Os",
+        "Re",
+        "Br"
+      ],
+      "formation_energy": -0.6804,
+      "found": true
+    },
+    {
+      "elements": [
+        "Pd",
+        "Ag",
+        "F"
+      ],
+      "formation_energy": -1.5711,
+      "found": true
+    },
+    {
+      "elements": [
+        "Au",
+        "Hg",
+        "Te"
+      ],
+      "formation_energy": null,
+      "found": false
+    }
+  ],
+  "active_learning": [
+    {
+      "step": 0,
+      "elements": [
+        "Li",
+        "Fe",
+        "P"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 1,
+      "elements": [
+        "Ca",
+        "Al",
+        "Si"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 2,
+      "elements": [
+        "Na",
+        "Ti",
+        "O"
+      ],
+      "formation_energy": -2.9961,
+      "found": true
+    },
+    {
+      "step": 3,
+      "elements": [
+        "Li",
+        "Si",
+        "N"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 4,
+      "elements": [
+        "Mg",
+        "Si",
+        "N"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 5,
+      "elements": [
+        "Ca",
+        "Ti",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 6,
+      "elements": [
+        "Al",
+        "Si",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 7,
+      "elements": [
+        "Li",
+        "Al",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 8,
+      "elements": [
+        "Sr",
+        "Ti",
+        "O"
+      ],
+      "formation_energy": -3.4967,
+      "found": true
+    },
+    {
+      "step": 9,
+      "elements": [
+        "Ca",
+        "Al",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 10,
+      "elements": [
+        "Ba",
+        "Ti",
+        "O"
+      ],
+      "formation_energy": -3.42,
+      "found": true
+    },
+    {
+      "step": 11,
+      "elements": [
+        "Mg",
+        "Al",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 12,
+      "elements": [
+        "Ca",
+        "Si",
+        "O"
+      ],
+      "formation_energy": -0.678,
+      "found": true
+    },
+    {
+      "step": 13,
+      "elements": [
+        "Y",
+        "Al",
+        "O"
+      ],
+      "formation_energy": null,
+      "found": false
+    },
+    {
+      "step": 14,
+      "elements": [
+        "Zr",
+        "Si",
+        "O"
+      ],
+      "formation_energy": -1.1024,
+      "found": true
+    }
+  ]
+}
